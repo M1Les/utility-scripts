@@ -1,8 +1,17 @@
 # run these commands from elevated PowerShell
 Start-Process PowerShell -Verb RunAs
 
-docker image pull mcr.microsoft.com/windows/servercore:1809
-docker image pull mcr.microsoft.com/windows/nanoserver:1809
+# Query the registry for necessary build information
+$winver = Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\'
+$versiontag = "$($winver.CurrentMajorVersionNumber).$($winver.CurrentMinorVersionNumber).$($winver.CurrentBuildNumber).$($winver.UBR)"
+
+
+docker image pull mcr.microsoft.com/windows/servercore:$versiontag
+docker image pull mcr.microsoft.com/windows/nanoserver:$versiontag
+
+docker image pull microsoft/dotnet:2.1-sdk-nanoserver-1809
+
+docker image pull microsoft/dotnet:2.1-aspnetcore-runtime-nanoserver-1809
 
 # $tag = '10.0.14393.1198'
 
